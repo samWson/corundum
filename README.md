@@ -9,7 +9,7 @@ Corundum aspires to be a live programming environment for the Ruby programming l
 
 A executable script in the `bin` directory starts Corundum as a text editor:
 
-```ruby
+```shell
 ./bin/corundum
 ```
 
