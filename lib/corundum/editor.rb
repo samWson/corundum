@@ -12,9 +12,9 @@ module Corundum
         ch = STDIN.getch().ord
 
         if ASCII_CONTROL_CODES.include?(ch)
-          printf("%d\n", ch)
+          printf("%d\r\n", ch)
         else
-          printf("%d ('%c')\n", ch, ch)
+          printf("%d ('%c')\r\n", ch, ch)
         end
       end
 
