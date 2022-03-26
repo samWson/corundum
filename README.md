@@ -5,6 +5,14 @@ A live programming environment for Ruby.
 
 Corundum aspires to be a live programming environment for the Ruby programming language. It is inspired by the [Pharo IDE](https://pharo.org/web) which is in turn derived from the Smalltalk programming language. Corundum should allow live inspection, debugging, and editing of Ruby code. Corundum should be able to fully explore source from the Ruby standard library and any installed Gems. Ruby in turn can be used to extend and modify Corundum and instantly see results. Corundum can be thought of to Ruby what Emacs is to Lisp.
 
+## Usage
+
+A executable script in the `bin` directory starts Corundum as a text editor:
+
+```ruby
+./bin/corundum
+```
+
 ## References
 
 The editor component of corundum was initially based on the [Build Your Own Text Editor](https://viewsourcecode.org/snaptoken/kilo/index.html) tutorial, which is in turn based of [Antriez's Kilo](https://github.com/antirez/kilo).
