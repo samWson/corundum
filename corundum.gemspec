@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Corundum::VERSION
   spec.authors       = ["Samuel Wilson"]
   spec.email         = ["samWson@users.noreply.github.com"]
-
+  spec.license       = "BSD-3-Clause"
   spec.summary       = %q{A live programming environment for Ruby.}
   spec.homepage      = "https://github.com/samWson/corundum"
 
@@ -34,8 +34,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "ruby-termios", "~> 1.1"
 
-  spec.add_development_dependency "bundler", "~> 1.17"
+  spec.add_development_dependency "bundler", ">= 2.3.7"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest", "~> 5.0"
-  spec.add_developemnt_dependency "rubocop", "~> 1.26", ">= 1.26.1"
+  spec.add_development_dependency "rubocop", "~> 1.26", ">= 1.26.1"
 end
