@@ -10,6 +10,7 @@ module Corundum
         program_running = true
 
         while program_running
+          STDOUT.clear_screen
           program_running = process_keypress(io)
         end
       end
