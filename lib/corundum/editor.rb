@@ -6,10 +6,10 @@ module Corundum
     ASCII_CONTROL_KEY = 0x1f
 
     def main
-      STDIN.raw!
-
-      while true
-        process_keypress
+      STDIN.raw do |io|
+        while true
+          process_keypress(io)
+        end
       end
 
       STDIN.cooked!
@@ -17,8 +17,8 @@ module Corundum
 
     private
 
-    def process_keypress
-      ch = read_key
+    def process_keypress(io)
+      ch = read_key(io)
 
       # Uncomment to help debug
       # print_keypress(ch)
@@ -29,8 +29,8 @@ module Corundum
       end
     end
 
-    def read_key
-      STDIN.getch.ord
+    def read_key(io)
+      io.getch.ord
     end
 
     def print_keypress(ch)
