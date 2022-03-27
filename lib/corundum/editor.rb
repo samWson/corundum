@@ -10,7 +10,7 @@ module Corundum
         program_running = true
 
         while program_running
-          STDOUT.clear_screen
+          refresh_screen
           program_running = process_keypress(io)
         end
       end
@@ -22,6 +22,11 @@ module Corundum
     end
 
     private
+
+    def refresh_screen
+      draw_rows
+      STDOUT.clear_screen
+    end
 
     def process_keypress(io)
       ch = read_key(io)
@@ -39,6 +44,12 @@ module Corundum
 
     def read_key(io)
       io.getch.ord
+    end
+
+    def draw_rows
+      (0...24).each do |row|
+        STDOUT.write("~\r\n")
+      end
     end
 
     def print_keypress(ch)
