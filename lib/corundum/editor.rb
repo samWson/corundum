@@ -9,24 +9,37 @@ module Corundum
       STDIN.raw!
 
       while true
-        ch = nil
-        ch = STDIN.getch().ord
-
-        if ASCII_CONTROL_CODES.include?(ch)
-          printf("%d\r\n", ch)
-        else
-          printf("%d ('%c')\r\n", ch, ch)
-        end
-
-        break if ch == control_key('q')
+        process_keypress
       end
 
       STDIN.cooked!
-
-      exit(0)
     end
 
     private
+
+    def process_keypress
+      ch = read_key
+
+      # Uncomment to help debug
+      # print_keypress(ch)
+
+      case ch
+      when control_key('q')
+        exit(0)
+      end
+    end
+
+    def read_key
+      STDIN.getch.ord
+    end
+
+    def print_keypress(ch)
+      if ASCII_CONTROL_CODES.include?(ch)
+        printf("%d\r\n", ch)
+      else
+        printf("%d ('%c')\r\n", ch, ch)
+      end
+    end
 
     def control_key(key)
       key.ord & ASCII_CONTROL_KEY
