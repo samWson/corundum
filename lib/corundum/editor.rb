@@ -17,6 +17,7 @@ module Corundum
 
       STDIN.cooked!
 
+      STDOUT.clear_screen
       exit(0)
     end
 
