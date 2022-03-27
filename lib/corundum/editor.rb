@@ -7,12 +7,16 @@ module Corundum
 
     def main
       STDIN.raw do |io|
-        while true
-          process_keypress(io)
+        program_running = true
+
+        while program_running
+          program_running = process_keypress(io)
         end
       end
 
       STDIN.cooked!
+
+      exit(0)
     end
 
     private
@@ -25,8 +29,10 @@ module Corundum
 
       case ch
       when control_key('q')
-        exit(0)
+        return nil
       end
+
+      ch
     end
 
     def read_key(io)
