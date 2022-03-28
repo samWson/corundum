@@ -5,6 +5,7 @@ module Corundum
     ASCII_CONTROL_CODES = 0..31
     ASCII_CONTROL_KEY = 0x1f
     TOP_LEFT = [0, 0]
+    ROW_INDEX = 0
 
     def main
       STDIN.raw do |io|
@@ -49,10 +50,11 @@ module Corundum
     end
 
     def draw_rows
-      STDOUT.cursor_down(1)
+      screen_rows = STDIN.winsize[ROW_INDEX]
 
-      (1..24).each do |row|
-        STDOUT.write("~\r\n")
+      (1...screen_rows).each do |row|
+        STDOUT.cursor = [row, 0]
+        STDOUT.write('~')
       end
     end
 
