@@ -4,6 +4,7 @@ module Corundum
   class Editor
     ASCII_CONTROL_CODES = 0..31
     ASCII_CONTROL_KEY = 0x1f
+    TOP_LEFT = [0, 0]
 
     def main
       STDIN.raw do |io|
@@ -26,6 +27,7 @@ module Corundum
     def refresh_screen
       STDOUT.clear_screen
       draw_rows
+      STDOUT.cursor = TOP_LEFT
     end
 
     def process_keypress(io)
@@ -47,7 +49,9 @@ module Corundum
     end
 
     def draw_rows
-      (0...24).each do |row|
+      STDOUT.cursor_down(1)
+
+      (1..24).each do |row|
         STDOUT.write("~\r\n")
       end
     end
