@@ -24,8 +24,8 @@ module Corundum
     private
 
     def refresh_screen
-      draw_rows
       STDOUT.clear_screen
+      draw_rows
     end
 
     def process_keypress(io)
