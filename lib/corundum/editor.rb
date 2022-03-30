@@ -7,6 +7,10 @@ module Corundum
     TOP_LEFT = [0, 0]
     ROW_INDEX = 0
 
+    def initialize
+      @append_buffer = AppendBuffer.new
+    end
+
     def main
       STDIN.raw do |io|
         program_running = true
@@ -28,6 +32,8 @@ module Corundum
     def refresh_screen
       STDOUT.clear_screen
       draw_rows
+      STDOUT.cursor = TOP_LEFT
+      STDOUT.write(@append_buffer.contents)
       STDOUT.cursor = TOP_LEFT
     end
 
@@ -52,9 +58,14 @@ module Corundum
     def draw_rows
       screen_rows = STDIN.winsize[ROW_INDEX]
 
-      (1...screen_rows).each do |row|
-        STDOUT.cursor = [row, 0]
-        STDOUT.write('~')
+      (0...screen_rows).each do |row|
+        if row == 0
+          @append_buffer << "\r\n"
+          next
+        end
+
+        @append_buffer << '~'
+        @append_buffer << "\r\n" if row < screen_rows - 1
       end
     end
 
@@ -68,6 +79,20 @@ module Corundum
 
     def control_key(key)
       key.ord & ASCII_CONTROL_KEY
+    end
+  end
+
+  class AppendBuffer
+    def initialize
+      @characters = []
+    end
+
+    def <<(string)
+      @characters.concat(string.chars)
+    end
+
+    def contents
+      @characters.join
     end
   end
 end
