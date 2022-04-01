@@ -6,6 +6,7 @@ module Corundum
     ASCII_CONTROL_KEY = 0x1f
     TOP_LEFT = [0, 0]
     ROW_INDEX = 0
+    COLUMN_INDEX = 1
 
     def initialize
       @append_buffer = AppendBuffer.new
@@ -57,6 +58,7 @@ module Corundum
 
     def draw_rows
       screen_rows = STDIN.winsize[ROW_INDEX]
+      screen_columns = STDIN.winsize[COLUMN_INDEX]
 
       (0...screen_rows).each do |row|
         if row == 0
@@ -64,7 +66,21 @@ module Corundum
           next
         end
 
-        @append_buffer << '~'
+        if row == screen_rows / 3
+          welcome = "Corundum -- version #{Corundum::VERSION}"
+          welcome = welcome.slice(0, screen_columns) if welcome.length > screen_columns
+
+          padding = (screen_columns - welcome.length) / 2
+          if padding > 0
+            welcome = welcome.rjust(padding)
+            welcome = welcome.prepend('~')
+          end
+
+          @append_buffer << welcome
+        else
+          @append_buffer << '~'
+        end
+
         @append_buffer << "\r\n" if row < screen_rows - 1
       end
     end
