@@ -10,6 +10,8 @@ module Corundum
 
     def initialize
       @append_buffer = AppendBuffer.new
+      @cursor_x = 0
+      @cursor_y = 0
     end
 
     def main
@@ -35,7 +37,7 @@ module Corundum
       draw_rows
       STDOUT.cursor = TOP_LEFT
       STDOUT.write(@append_buffer.contents)
-      STDOUT.cursor = TOP_LEFT
+      STDOUT.cursor = [@cursor_y, @cursor_x]
     end
 
     def process_keypress(io)
