@@ -35,7 +35,6 @@ module Corundum
     def refresh_screen
       STDOUT.clear_screen
       draw_rows
-      STDOUT.cursor = TOP_LEFT
       STDOUT.write(@append_buffer.contents)
       STDOUT.cursor = [@cursor_y, @cursor_x]
     end
@@ -49,6 +48,19 @@ module Corundum
       case ch
       when control_key('q')
         return nil
+
+      when key('a')
+        @cursor_x -= 1
+        STDOUT.cursor_left(1)
+      when key('d')
+        @cursor_x += 1
+        STDOUT.cursor_right(1)
+      when key('w')
+        @cursor_y -= 1
+        STDOUT.cursor_up(1)
+      when key('s')
+        @cursor_y += 1
+        STDOUT.cursor_down(1)
       end
 
       ch
@@ -97,6 +109,10 @@ module Corundum
 
     def control_key(key)
       key.ord & ASCII_CONTROL_KEY
+    end
+
+    def key(key)
+      key.ord
     end
   end
 
