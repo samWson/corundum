@@ -4,9 +4,17 @@ module Corundum
   class Editor
     ASCII_CONTROL_CODES = 0..31
     ASCII_CONTROL_KEY = 0x1f
+    ASCII_ESCAPE_CODE = 27
     TOP_LEFT = [0, 0]
     ROW_INDEX = 0
     COLUMN_INDEX = 1
+
+    EDITOR_KEY = {
+      arrow_left: 'a',
+      arrow_right: 'd',
+      arrow_up: 'w',
+      arrow_down: 's'
+    }.freeze
 
     def initialize
       @append_buffer = AppendBuffer.new
@@ -49,16 +57,16 @@ module Corundum
       when control_key('q')
         return nil
 
-      when key('a')
+      when key(EDITOR_KEY[:arrow_left])
         @cursor_x -= 1
         STDOUT.cursor_left(1)
-      when key('d')
+      when key(EDITOR_KEY[:arrow_right])
         @cursor_x += 1
         STDOUT.cursor_right(1)
-      when key('w')
+      when key(EDITOR_KEY[:arrow_up])
         @cursor_y -= 1
         STDOUT.cursor_up(1)
-      when key('s')
+      when key(EDITOR_KEY[:arrow_down])
         @cursor_y += 1
         STDOUT.cursor_down(1)
       end
@@ -67,7 +75,33 @@ module Corundum
     end
 
     def read_key(io)
-      io.getch.ord
+      ordinal = io.getch.ord
+
+      if ordinal == ASCII_ESCAPE_CODE
+        sequence = (0..1).each_with_object([]) do |index, bytes|
+          bytes[index] = io.getch.ord
+        end
+
+        return ASCII_ESCAPE_CODE unless sequence[0]
+        return ASCII_ESCAPE_CODE unless sequence[1]
+
+        if sequence[0] == '['.ord
+          case sequence[1]
+          when 'A'.ord
+            return EDITOR_KEY[:arrow_up].ord
+          when 'B'.ord
+            return EDITOR_KEY[:arrow_down].ord
+          when 'C'.ord
+            return EDITOR_KEY[:arrow_right].ord
+          when 'D'.ord
+            return EDITOR_KEY[:arrow_left].ord
+          end
+        end
+
+        return ASCII_ESCAPE_CODE
+      else
+        ordinal
+      end
     end
 
     def draw_rows
