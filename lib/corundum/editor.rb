@@ -10,10 +10,10 @@ module Corundum
     COLUMN_INDEX = 1
 
     EDITOR_KEY = {
-      arrow_left: 'a',
-      arrow_right: 'd',
-      arrow_up: 'w',
-      arrow_down: 's'
+      arrow_left: 1000,
+      arrow_right: 1001,
+      arrow_up: 1002,
+      arrow_down: 1003
     }.freeze
 
     def initialize
@@ -88,13 +88,13 @@ module Corundum
         if sequence[0] == '['.ord
           case sequence[1]
           when 'A'.ord
-            return EDITOR_KEY[:arrow_up].ord
+            return EDITOR_KEY[:arrow_up]
           when 'B'.ord
-            return EDITOR_KEY[:arrow_down].ord
+            return EDITOR_KEY[:arrow_down]
           when 'C'.ord
-            return EDITOR_KEY[:arrow_right].ord
+            return EDITOR_KEY[:arrow_right]
           when 'D'.ord
-            return EDITOR_KEY[:arrow_left].ord
+            return EDITOR_KEY[:arrow_left]
           end
         end
 
