@@ -57,18 +57,8 @@ module Corundum
       when control_key('q')
         return nil
 
-      when key(EDITOR_KEY[:arrow_left])
-        @cursor_x -= 1
-        STDOUT.cursor_left(1)
-      when key(EDITOR_KEY[:arrow_right])
-        @cursor_x += 1
-        STDOUT.cursor_right(1)
-      when key(EDITOR_KEY[:arrow_up])
-        @cursor_y -= 1
-        STDOUT.cursor_up(1)
-      when key(EDITOR_KEY[:arrow_down])
-        @cursor_y += 1
-        STDOUT.cursor_down(1)
+      when 1000, 1001, 1002, 1003
+        move_cursor(ch)
       end
 
       ch
@@ -143,6 +133,23 @@ module Corundum
 
     def control_key(key)
       key.ord & ASCII_CONTROL_KEY
+    end
+
+    def move_cursor(ordinal)
+      case ordinal
+      when key(EDITOR_KEY[:arrow_left])
+        @cursor_x -= 1
+        STDOUT.cursor_left(1)
+      when key(EDITOR_KEY[:arrow_right])
+        @cursor_x += 1
+        STDOUT.cursor_right(1)
+      when key(EDITOR_KEY[:arrow_up])
+        @cursor_y -= 1
+        STDOUT.cursor_up(1)
+      when key(EDITOR_KEY[:arrow_down])
+        @cursor_y += 1
+        STDOUT.cursor_down(1)
+      end
     end
 
     def key(key)
