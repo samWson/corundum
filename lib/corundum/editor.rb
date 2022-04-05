@@ -138,17 +138,25 @@ module Corundum
     def move_cursor(ordinal)
       case ordinal
       when key(EDITOR_KEY[:arrow_left])
-        @cursor_x -= 1
-        STDOUT.cursor_left(1)
+        if @cursor_x != 0
+          @cursor_x -= 1
+          STDOUT.cursor_left(1)
+        end
       when key(EDITOR_KEY[:arrow_right])
-        @cursor_x += 1
-        STDOUT.cursor_right(1)
+        if @cursor_x != STDIN.winsize[COLUMN_INDEX] - 1
+          @cursor_x += 1
+          STDOUT.cursor_right(1)
+        end
       when key(EDITOR_KEY[:arrow_up])
-        @cursor_y -= 1
-        STDOUT.cursor_up(1)
+        if @cursor_y != 0
+          @cursor_y -= 1
+          STDOUT.cursor_up(1)
+        end
       when key(EDITOR_KEY[:arrow_down])
-        @cursor_y += 1
-        STDOUT.cursor_down(1)
+        if @cursor_y != STDIN.winsize[ROW_INDEX] - 1
+          @cursor_y += 1
+          STDOUT.cursor_down(1)
+        end
       end
     end
 
