@@ -57,3 +57,6 @@ build-iPhoneSimulator/
 
 # Nova text editor
 .nova
+
+# Sublime text editor
+*.sublime-*
