@@ -9,13 +9,20 @@ module Corundum
     ROW_INDEX = 0
     COLUMN_INDEX = 1
 
+    LEFT_ORDINAL = 1000
+    RIGHT_ORDINAL = 1001
+    UP_ORDINAL = 1002
+    DOWN_ORDINAL = 1003
+    PAGE_UP_ORDINAL = 1004
+    PAGE_DOWN_ORDINAL = 1005
+
     EDITOR_KEY = {
-      arrow_left: 1000,
-      arrow_right: 1001,
-      arrow_up: 1002,
-      arrow_down: 1003,
-      page_up: 1004,
-      page_down: 1005
+      arrow_left: LEFT_ORDINAL,
+      arrow_right: RIGHT_ORDINAL,
+      arrow_up: UP_ORDINAL,
+      arrow_down: DOWN_ORDINAL,
+      page_up: PAGE_UP_ORDINAL,
+      page_down: PAGE_DOWN_ORDINAL
     }.freeze
 
     def initialize
@@ -59,10 +66,10 @@ module Corundum
       when control_key('q')
         return nil
 
-      when 1000, 1001, 1002, 1003
+      when LEFT_ORDINAL, RIGHT_ORDINAL, UP_ORDINAL, DOWN_ORDINAL
         move_cursor(ch)
 
-      when 1004, 1005
+      when PAGE_UP_ORDINAL, PAGE_DOWN_ORDINAL
         move_page(ch)
       end
 
@@ -182,7 +189,7 @@ module Corundum
     def move_page(ordinal)
       screen_rows = STDIN.winsize[ROW_INDEX]
 
-      if ordinal == 1004
+      if ordinal == PAGE_UP_ORDINAL
         (screen_rows - 1).times { |n| move_cursor(EDITOR_KEY[:arrow_up])}
       else
         (screen_rows - 1).times { |n| move_cursor(EDITOR_KEY[:arrow_down])}
