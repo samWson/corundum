@@ -13,7 +13,9 @@ module Corundum
       arrow_left: 1000,
       arrow_right: 1001,
       arrow_up: 1002,
-      arrow_down: 1003
+      arrow_down: 1003,
+      page_up: 1004,
+      page_down: 1005
     }.freeze
 
     def initialize
@@ -59,6 +61,9 @@ module Corundum
 
       when 1000, 1001, 1002, 1003
         move_cursor(ch)
+
+      when 1004, 1005
+        move_page(ch)
       end
 
       ch
@@ -76,15 +81,29 @@ module Corundum
         return ASCII_ESCAPE_CODE unless sequence[1]
 
         if sequence[0] == '['.ord
-          case sequence[1]
-          when 'A'.ord
-            return EDITOR_KEY[:arrow_up]
-          when 'B'.ord
-            return EDITOR_KEY[:arrow_down]
-          when 'C'.ord
-            return EDITOR_KEY[:arrow_right]
-          when 'D'.ord
-            return EDITOR_KEY[:arrow_left]
+          if (0..9).include?(sequence[1])
+            bytes[2] = io.getch.ord
+            return ASCII_ESCAPE_CODE unless sequence[2]
+
+            if sequence[1] == key('~')
+              case sequence[1]
+              when key('5')
+                return EDITOR_KEY[:page_up]
+              when key('6')
+                return EDITOR_KEY[:page_down]
+              end
+            end
+          else
+            case sequence[1]
+            when 'A'.ord
+              return EDITOR_KEY[:arrow_up]
+            when 'B'.ord
+              return EDITOR_KEY[:arrow_down]
+            when 'C'.ord
+              return EDITOR_KEY[:arrow_right]
+            when 'D'.ord
+              return EDITOR_KEY[:arrow_left]
+            end
           end
         end
 
@@ -157,6 +176,16 @@ module Corundum
           @cursor_y += 1
           STDOUT.cursor_down(1)
         end
+      end
+    end
+
+    def move_page(ordinal)
+      screen_rows = STDIN.winsize[ROW_INDEX]
+
+      if ordinal == 1004
+        (screen_rows - 1).times { |n| move_cursor(EDITOR_KEY[:arrow_up])}
+      else
+        (screen_rows - 1).times { |n| move_cursor(EDITOR_KEY[:arrow_down])}
       end
     end
 
