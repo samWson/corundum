@@ -15,6 +15,8 @@ module Corundum
     DOWN_ORDINAL = 1003
     PAGE_UP_ORDINAL = 1004
     PAGE_DOWN_ORDINAL = 1005
+    HOME_ORDINAL = 1006
+    END_ORDINAL = 1007
 
     EDITOR_KEY = {
       arrow_left: LEFT_ORDINAL,
@@ -22,7 +24,9 @@ module Corundum
       arrow_up: UP_ORDINAL,
       arrow_down: DOWN_ORDINAL,
       page_up: PAGE_UP_ORDINAL,
-      page_down: PAGE_DOWN_ORDINAL
+      page_down: PAGE_DOWN_ORDINAL,
+      home: HOME_ORDINAL,
+      end: END_ORDINAL
     }.freeze
 
     def initialize
@@ -66,6 +70,14 @@ module Corundum
       when control_key('q')
         return nil
 
+      when HOME_ORDINAL
+        @cursor_x = 0
+        STDOUT.cursor = [@cursor_x, @cursor_y]
+
+      when END_ORDINAL
+        @cursor_x = STDIN.winsize[COLUMN_INDEX]
+        STDOUT.cursor = [@cursor_x, @cursor_y]
+
       when LEFT_ORDINAL, RIGHT_ORDINAL, UP_ORDINAL, DOWN_ORDINAL
         move_cursor(ch)
 
@@ -94,10 +106,18 @@ module Corundum
 
             if sequence[1] == key('~')
               case sequence[1]
+              when key('1')
+                return EDITOR_KEY[:home]
+              when key('4')
+                return EDITOR_KEY[:end]
               when key('5')
                 return EDITOR_KEY[:page_up]
               when key('6')
                 return EDITOR_KEY[:page_down]
+              when key('7')
+                return EDITOR_KEY[:home]
+              when key('8')
+                return EDITOR_KEY[:end]
               end
             end
           else
@@ -110,7 +130,18 @@ module Corundum
               return EDITOR_KEY[:arrow_right]
             when 'D'.ord
               return EDITOR_KEY[:arrow_left]
+            when 'H'.ord
+              return EDITOR_KEY[:home]
+            when 'F'.ord
+              return EDITOR_KEY[:end]
             end
+          end
+        elsif sequence[0] == 'O'.ord
+          case sequence[1]
+          when 'H'.ord
+            return EDITOR_KEY[:home]
+          when 'F'.ord
+            return EDITOR_KEY[:end]
           end
         end
 
