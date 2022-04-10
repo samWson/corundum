@@ -13,16 +13,18 @@ module Corundum
     RIGHT_ORDINAL = 1001
     UP_ORDINAL = 1002
     DOWN_ORDINAL = 1003
-    PAGE_UP_ORDINAL = 1004
-    PAGE_DOWN_ORDINAL = 1005
-    HOME_ORDINAL = 1006
-    END_ORDINAL = 1007
+    DELETE_ORDINAL = 1004
+    PAGE_UP_ORDINAL = 1005
+    PAGE_DOWN_ORDINAL = 1006
+    HOME_ORDINAL = 1007
+    END_ORDINAL = 1008
 
     EDITOR_KEY = {
       arrow_left: LEFT_ORDINAL,
       arrow_right: RIGHT_ORDINAL,
       arrow_up: UP_ORDINAL,
       arrow_down: DOWN_ORDINAL,
+      delete: DELETE_ORDINAL,
       page_up: PAGE_UP_ORDINAL,
       page_down: PAGE_DOWN_ORDINAL,
       home: HOME_ORDINAL,
@@ -108,6 +110,8 @@ module Corundum
               case sequence[1]
               when key('1')
                 return EDITOR_KEY[:home]
+              when key('3')
+                return EDITOR_KEY[:delete]
               when key('4')
                 return EDITOR_KEY[:end]
               when key('5')
