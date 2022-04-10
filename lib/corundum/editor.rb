@@ -35,11 +35,14 @@ module Corundum
       @append_buffer = AppendBuffer.new
       @cursor_x = 0
       @cursor_y = 0
+      @row = []
+      @number_of_rows = 0
     end
 
     def main
       STDIN.raw do |io|
         program_running = true
+        open
 
         while program_running
           refresh_screen
@@ -54,6 +57,11 @@ module Corundum
     end
 
     private
+
+    def open
+      @row = 'Hello, world!'.chars
+      @number_of_rows = 1
+    end
 
     def refresh_screen
       STDOUT.clear_screen
@@ -160,24 +168,30 @@ module Corundum
       screen_columns = STDIN.winsize[COLUMN_INDEX]
 
       (0...screen_rows).each do |row|
-        if row == 0
-          @append_buffer << "\r\n"
-          next
-        end
-
-        if row == screen_rows / 3
-          welcome = "Corundum -- version #{Corundum::VERSION}"
-          welcome = welcome.slice(0, screen_columns) if welcome.length > screen_columns
-
-          padding = (screen_columns - welcome.length) / 2
-          if padding > 0
-            welcome = welcome.rjust(padding)
-            welcome = welcome.prepend('~')
+        if row >= @number_of_rows
+          if row == 0
+            @append_buffer << "\r\n"
+            next
           end
 
-          @append_buffer << welcome
+          if row == screen_rows / 3
+            welcome = "Corundum -- version #{Corundum::VERSION}"
+            welcome = welcome.slice(0, screen_columns) if welcome.length > screen_columns
+
+            padding = (screen_columns - welcome.length) / 2
+            if padding > 0
+              welcome = welcome.rjust(padding)
+              welcome = welcome.prepend('~')
+            end
+
+            @append_buffer << welcome
+          else
+            @append_buffer << '~'
+          end 
         else
-          @append_buffer << '~'
+          length = @row.length
+          length = STDIN.winsize[COLUMN_INDEX] if @row.length > STDIN.winsize[COLUMN_INDEX]
+          @append_buffer << @row.join
         end
 
         @append_buffer << "\r\n" if row < screen_rows - 1
